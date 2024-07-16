@@ -1,0 +1,49 @@
+.sidenav-button
+{
+    background-color:transparent !important;
+    border:none !important;
+    color:white!important;
+    margin-right:5px;
+}
+.custom-header
+{
+
+    background-color:#005cbb;
+    color:white;
+    font-size:20px;
+}
+
+mat-list-item:hover {
+    background-color: blue; /* Change to the color you want on hover */
+}
+
+.example-sidenav-container {
+    flex: 1;
+}
+
+
+  h1.example-app-name {
+    margin-left: 8px;
+  }
+  
+
+mat-sidenav-container {
+    height:100vh !important;
+  }
+
+  mat-sidenav-content{
+    background-color: transparent;
+  }
+  
+  mat-sidenav
+  {
+    background-color:#d7e3ff;
+    width:250px;
+    color:#005cbb;
+  }
+
+  .list-item
+  {
+    margin-left:20px;
+    padding:5px;
+  }
