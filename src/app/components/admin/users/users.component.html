@@ -1,0 +1,90 @@
+<div class="h-100 w-100">
+    <h6 class="m-2">Admin/GetAllUsers</h6>
+    <form  [formGroup]="searchFiltersForm" (ngSubmit)="onSubmit()">
+    <div class="d-flex justify-content-between">
+      <div class="filter-div d-flex">
+          <div class="filter m-2">
+              <mat-form-field appearance="outline" class="me-2">
+                  <mat-label>Search by name/email</mat-label>
+                  <input matInput formControlName="nameOrEmail" placeholder="Ex. Franie" #input>
+                </mat-form-field>
+          </div>
+  
+  
+          <div class="filter m-2">
+            <mat-form-field appearance="outline" >
+              <mat-label>Select role</mat-label>
+              <select matNativeControl id="mySelectId" formControlName="roleId">
+                <option value="0" disabled selected></option>
+                <option value="1">Admin</option>
+                <option value="2">Network Admin</option>
+                <option value="3">Developer</option>
+                <option value="4">Service Manager</option>
+              </select>
+            </mat-form-field>
+          </div>
+  
+          <div class="m-2">
+              <button class="btn btn-success" type="submit">Search</button>
+          </div>
+          <div class="m-2">
+              <button type="button" class="btn btn-secondary" (click)="onReset()">Reset</button>
+          </div>
+        </div>
+        <div>
+          <button type="button" class="btn btn-primary m-2" (click)="addUser()"><i class="bi bi-plus-square" ></i>&nbsp;Add User</button>
+        </div>
+    </div>
+    </form>
+    
+    <div class="mat-elevation-z8 m-2">
+        <table mat-table [dataSource]="dataSource"  matSort (matSortChange)="announceSortChange($event)">
+            
+          <!-- ID Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+            <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+          </ng-container>
+      
+
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+            <td mat-cell *matCellDef="let row"> {{row.email}}</td>
+          </ng-container>
+      
+
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
+            <td mat-cell *matCellDef="let row"> {{row.role}}</td>
+          </ng-container>
+      
+
+
+    
+          <ng-container matColumnDef="userId">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell  *matCellDef="let row"><a><button class="btn btn-outline-primary" type="button" (click)="editUser(row.userId)"><i class="bi bi-pencil-square"></i> Edit</button></a>&nbsp;
+                                                <a><button class="btn btn-outline-danger" type="button" (click)="deleteUserDialog(row.userId)"><i class="bi bi-x-square"></i> Delete</button></a></td>
+          </ng-container>
+      
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      
+          <!-- Row shown when there is no matching data.
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+
+            [routerLink]="['edit-user/{{row.userId}}']"
+          </tr> -->
+        </table>
+        
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+        (page)="onPageChangeEvent($event)"
+        showFirstLastButtons
+        aria-label="Select page of periodic elements">
+        </mat-paginator>
+
+      </div>
+</div>
+
+  

@@ -8,6 +8,7 @@ import { GlobalErrorHandler } from './errors/global-error-handler';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ErrorInterceptor } from './errors/error.interceptor';
 import { MaterialModule } from './material.module';
+
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideAnimationsAsync(),provideHttpClient(),
     {

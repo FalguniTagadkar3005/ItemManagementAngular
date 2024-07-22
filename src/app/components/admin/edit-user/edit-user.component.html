@@ -1,0 +1,69 @@
+<div class="h-100 w-100">
+    <h6 class="m-2 mb-3">Admin/EditUser</h6>
+    <p class="m-2">User Details</p>
+    <form [formGroup]="editUserForm" (ngSubmit)="onSubmit()">
+      <div class="">
+          <div class="m-2 d-flex justify-content-between" style="width:30%;">
+              <label class="form-label">Name:</label>
+              <mat-form-field appearance="outline" class="w-75" style="margin-left:-10px;">
+                  <input matInput formControlName="name" placeholder="Ex. Franie" #input [value]="user.name">
+
+                <mat-error *ngIf="getControls['name'].invalid && getControls['name'].errors">                 
+                    <div class="error-message" *ngIf="getControls['name']!.errors['required']">Name is required</div>
+                </mat-error>
+                </mat-form-field>
+          </div>
+  
+          <div class="m-2 d-flex justify-content-between" style="width:30%;">
+              <label class="form-label">Email:</label>
+                <mat-form-field appearance="outline" class="w-75">
+                <input matInput formControlName="email" placeholder="Ex. franie@gmail.com" #input [value]="user.email">
+
+                <mat-error *ngIf="getControls['email'].invalid && getControls['email'].errors">                 
+                    <div class="error-message" *ngIf="getControls['email'].errors['required']">Email is required</div>
+                    <div class="error-message" *ngIf="getControls['email'].errors['email']">Invalid email</div>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="m-2 d-flex justify-content-between" style="width:30%;">
+                <label class="form-label">Password:</label>
+                <mat-form-field appearance="outline" class="w-75">
+                    <input matInput formControlName="password"  #input>
+
+                    <mat-error *ngIf="getControls['password'].invalid && getControls['password'].errors">                 
+                        <div class="error-message" *ngIf="getControls['password'].errors['required']">Password is required</div>
+                        <div class="error-message" *ngIf="getControls['password'].errors['pattern']">Invalid password</div>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+  
+          <div class="m-2 d-flex justify-content-between" style="width:30%;">
+              <label for="role">Role:</label>
+            <mat-form-field appearance="outline" class=" w-75" >
+              <mat-label>Select role</mat-label>
+              <select matNativeControl id="mySelectId" formControlName="roleId">
+                <option value="" disabled selected></option>
+                <option value="1">Admin</option>
+                <option value="2">Network Admin</option>
+                <option value="3">Developer</option>
+                <option value="4">Service Manager</option>
+              </select>
+
+              <mat-error *ngIf="getControls['roleId'].invalid && getControls['roleId']!.errors">                 
+                <div class="error-message" *ngIf="getControls['roleId']!.errors['required']">Role is required</div>
+            </mat-error>
+            </mat-form-field>
+          </div>
+          
+          <div class="m-2 d-flex justify-content-end" style="width:30%">
+              <div class="m-2">
+                  <button class="btn btn-success" type="submit">Add User</button>
+              </div>
+              <div class="m-2">
+                  <button type="button" class="btn btn-secondary" (click)="onClear()">Clear</button>
+              </div>
+          </div>
+        </div>
+    </form>

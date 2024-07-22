@@ -1,0 +1,35 @@
+mat-card
+{
+    width:50%;
+    box-shadow:inset;
+}
+mat-card-content
+{
+    font-size:18px;
+}
+
+mat-card-header
+{
+    /* background-color:#d7e3ff; */
+    background-color:#005cbb;
+    color:white;
+    border-radius:10px 10px 0px 0px;
+}
+
+.field-name
+{
+    color:rgb(132, 128, 128);
+    display:block;
+    margin:10px;
+    margin-right:10%;
+}
+
+.field-value
+{
+    margin:10px;
+}
+.custom-button
+{
+    background-color:#005cbb !important;
+    color:white;
+}

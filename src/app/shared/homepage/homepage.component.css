@@ -1,9 +1,36 @@
-.sidenav-button
+mat-sidenav-container {
+    height:90vh !important;
+  }
+
+mat-sidenav-content{
+background-color:  rgba(26, 27, 31, 0.05);
+}
+
+mat-sidenav
+{
+background-color:white;
+width:250px;
+color:#005cbb;
+border-radius:0px;
+border-right:1px solid black;
+}
+
+.parent-div{
+  box-sizing:border-box;
+  border-radius:5px;
+}
+.sidenav-button,.mat-button
 {
     background-color:transparent !important;
     border:none !important;
     color:white!important;
     margin-right:5px;
+    outline:none;
+}
+.active-nav-tab
+{
+    background-color:#005cbb;
+    color:white;
 }
 .custom-header
 {
@@ -13,8 +40,9 @@
     font-size:20px;
 }
 
-mat-list-item:hover {
-    background-color: blue; /* Change to the color you want on hover */
+.list-item:hover {
+    background-color:#d7e3ff; /* Change to the color you want on hover */
+    color:#005cbb;
 }
 
 .example-sidenav-container {
@@ -27,23 +55,25 @@ mat-list-item:hover {
   }
   
 
-mat-sidenav-container {
-    height:100vh !important;
-  }
 
-  mat-sidenav-content{
-    background-color: transparent;
-  }
-  
-  mat-sidenav
-  {
-    background-color:#d7e3ff;
-    width:250px;
-    color:#005cbb;
-  }
 
   .list-item
   {
-    margin-left:20px;
-    padding:5px;
+    margin:5px;
+    padding:10px;
+    border-radius:5px;
+  }
+
+  .user-profile
+  {
+    height:30px;
+    width:30px;
+    border-radius:50%;
+    background-color:white;
+    color:black;
+    margin-right:15px;
+  }
+  .user-name
+  {
+    color:white;
   }

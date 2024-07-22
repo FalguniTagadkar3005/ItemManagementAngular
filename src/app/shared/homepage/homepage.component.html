@@ -1,7 +1,25 @@
-<div style="height:100vh" [class.example-is-mobile]="mobileQuery.matches">
-    <mat-toolbar class="custom-header">
-      <button mat-icon-button (click)="snav.toggle()" class="sidenav-button"><mat-icon>menu</mat-icon></button>
-      <h1 class="example-app-name">Item Management Portal</h1>
+<div style="height:100vh" [class.example-is-mobile]="mobileQuery.matches" class="background-color: rgba(26, 27, 31, 0.08)">
+    <mat-toolbar class="custom-header d-flex justify-content-between">
+        <div class="d-flex">
+        <button mat-icon-button (click)="snav.toggle()" class="sidenav-button"><mat-icon>menu</mat-icon></button>
+        <h1 class="example-app-name">Item Management Portal</h1>
+        </div>
+        <div class="d-flex">
+            <div class="user-profile">
+                <i class="fa-solid fa-user" style="margin-left:5px;"></i>
+            </div>
+            <div class="user-name d-none d-md-block">{{user.name}}</div>
+            <div>
+                <button mat-icon-button class="mat-button" [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <a mat-menu-item [routerLink]="['myprofile']">My Details</a>
+                    <a mat-menu-item [routerLink]="['changepassword']">Change Password</a>
+                    <a mat-menu-item>Logout</a>
+                  </mat-menu>
+            </div>
+        </div>
     </mat-toolbar>
 
     
@@ -12,14 +30,16 @@
                   [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
         <mat-nav-list class="h-100">
 
-            <div mat-list-item class="list-item">Add request</div>
-            <div mat-list-item class="list-item">Manage request</div>
+            <div mat-list-item class="list-item active-nav-tab" [routerLink]="['homepage']" [routerLinkActive]="['active-nav-tab']">Dashboard</div>
+            <div mat-list-item class="list-item" [routerLink]="['users']" [routerLinkActive]="['active-nav-tab']">User</div>
 
         </mat-nav-list>
       </mat-sidenav>
 
       <mat-sidenav-content class="">
-        hello everyone
+        <div class="parent-div h-100 bg-white m-4">
+          <router-outlet></router-outlet>
+        </div>
       </mat-sidenav-content>
     </mat-sidenav-container>
   </div>

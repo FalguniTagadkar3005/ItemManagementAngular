@@ -7,11 +7,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 
 import { FormBuilder,FormGroup,Validators,ReactiveFormsModule } from '@angular/forms';
-import {  apiResponse, loginRequest } from '../DTO/customObjects';
+import {  apiResponse, loginRequest } from '../../DTO/customObjects';
 import { SharedServicesService } from '../shared-services.service';
 import { Router,RouterLink } from '@angular/router';
 import { catchError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import {CookieService} from 'ngx-cookie-service';
 
 
 @Component({
@@ -34,7 +35,8 @@ export class LoginComponent {
   service:SharedServicesService;
   router:Router;
   userNotFound:string;
-  constructor(private formBuilder:FormBuilder,private _service:SharedServicesService,private _router:Router) {
+  cookieService:CookieService;
+  constructor(private formBuilder:FormBuilder,private _service:SharedServicesService,private _router:Router,private _cookieService:CookieService) {
 
     this.loginForm = this.formBuilder.group({
       email:['',[Validators.required,Validators.email]],
@@ -42,6 +44,7 @@ export class LoginComponent {
     })
     this.service = _service;
     this.router = _router;
+    this.cookieService = _cookieService;
   }
 
   get getControls() {
@@ -69,7 +72,8 @@ export class LoginComponent {
       }
       
       this.service.login(loginRequest).subscribe((res : apiResponse<string>) => {
-          this.router.navigate(['/homepage']);     
+        this.cookieService.set('Jwt',res.data,{ expires: new Date(new Date().getTime() +  1000 * 60 * 30)}); 
+          this.router.navigate(['/homepage']);  
       },(error:HttpErrorResponse)=>
       {
         this.userNotFound = "User not found";

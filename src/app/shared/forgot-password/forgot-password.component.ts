@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 
 import { FormBuilder,FormGroup,Validators,ReactiveFormsModule } from '@angular/forms';
-import {  apiResponse, forgotPasswordRequest } from '../DTO/customObjects';
+import {  apiResponse, forgotPasswordRequest } from '../../DTO/customObjects';
 import { SharedServicesService } from '../shared-services.service';
 import { RouterModule } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';

@@ -1,0 +1,37 @@
+<div class="container d-flex justify-content-center align-items-center w-100 h-75">
+    <mat-card>
+       <!-- <h6 class="m-3">User profile</h6> -->
+        <mat-card-header>
+            <mat-card-title class="mb-3">User Details</mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="m-2 d-flex align-items-center justify-content-center">
+            <form class="p-4 w-100" [formGroup]="userDataForm" (ngSubmit)="onSubmit()">
+                <div class="d-flex">
+                    <label class="form-label" class="field-name">Name:</label>
+                    <span class="field-value">{{user.name}}</span>
+      
+                </div>
+
+                <div class="d-flex">
+                    <label class="form-label" class="field-name">Email :</label>
+                    <span class="field-value">{{user.email}}</span>
+ 
+                </div>
+
+         
+
+                <div class="d-flex">
+                    <label class="form-label" class="field-name">Role :</label>
+                    <span class="field-value">{{user.role}}</span>
+                </div>
+
+                
+                <div class="d-flex">
+                    <label class="form-label" class="field-name">RO :</label>
+                    <span class="field-value">{{user.ro}}</span>
+                </div>
+
+            </form>   
+        </mat-card-content>
+    </mat-card>
+</div>
