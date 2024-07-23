@@ -17,13 +17,13 @@ import {
     MatDialogContent,
     MatDialogActions,
     MatDialogClose,MatButtonModule],
-  templateUrl: './delete-user-dialog.component.html',
-  styleUrl: './delete-user-dialog.component.css'
+  templateUrl: './delete-dialog.component.html',
+  styleUrl: './delete-dialog.component.css'
 })
-export class DeleteUserDialogComponent {
+export class DeleteDialogComponent {
 
   constructor(
-    public dialogRef: MatDialogRef<DeleteUserDialogComponent>,
+    public dialogRef: MatDialogRef<DeleteDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 

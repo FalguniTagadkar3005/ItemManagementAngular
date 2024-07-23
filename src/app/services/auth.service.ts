@@ -29,4 +29,10 @@ export class AuthService {
     const decodedToken: any = this.getDecodedToken();
     return decodedToken ? decodedToken.Id : null; // Assuming 'sub' is the key for user ID in your token claims
   }
+
+    getRoleFromToken():string|null
+    {
+      const decodedToken : any = this.getDecodedToken();
+      return decodedToken? decodedToken["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] : null;
+    }
 }

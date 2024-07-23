@@ -4,7 +4,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormBuilder,FormGroup,Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AdminService } from '../../../services/admin.service';
-import { addOrEditUserRequest, userResponse } from '../../../DTO/admin';
+import { editUserRequest, userResponse } from '../../../DTO/admin';
 import { apiResponse } from '../../../DTO/customObjects';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar,MatSnackBarModule } from '@angular/material/snack-bar';
@@ -23,13 +23,15 @@ export class EditUserComponent {
   userId:number;
   //to display user data in fields when user lands on the page
   user:userResponse;
+  name:string;
+  email:string;
+  roleId:number;
 
   constructor(private _service:AdminService,private _formBuilder:FormBuilder,private snackBar:MatSnackBar,
     private router:Router,private _activatedRoute:ActivatedRoute) {
     this.editUserForm = this._formBuilder.group({
       name:['',[Validators.required]],
       email:['',[Validators.required,Validators.email]],
-      password:['',[Validators.required,Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{7,}')]],
       roleId:['',Validators.required]
     })
     this.GetUser();
@@ -40,14 +42,14 @@ export class EditUserComponent {
   }
 
   public EditUser(): void {
-    let body :addOrEditUserRequest= {
+    let body :editUserRequest= {
       name:this.getControls['name'].value,
       email:this.getControls['email'].value,
-      password:this.getControls['password'].value,
       roleId:this.getControls['roleId'].value,
       roId:15
     };
-    this._service.editUser(1,body).subscribe((res : apiResponse<string>) => {
+    debugger
+    this._service.editUser(this.userId,body).subscribe((res : apiResponse<string>) => {
       this.openSnackBar(res.message,"Ok");
     });
   }
@@ -59,6 +61,9 @@ export class EditUserComponent {
         this._service.getUser(this.userId).subscribe((res:apiResponse<userResponse>)=>
         {
           this.user = res.data;
+          this.name = this.user.name;
+          this.email = this.user.email;
+          this.roleId = this.user.roleId;
           console.log(this.user);
         })
       })
@@ -71,15 +76,15 @@ export class EditUserComponent {
 
   onSubmit()
   {
-    if(this.getControls['name'].valid && this.getControls['email'].valid && this.getControls['password'].valid && this.getControls['roleId'].valid)
+    if(this.getControls['name'].valid && this.getControls['email'].valid && this.getControls['roleId'].valid)
     {
       this.EditUser();
-      this.router.navigate(['/homepage/edit-user']);
+      this.router.navigate(['/homepage/edit-user/'+this.userId]);
     }
   }
 
   onClear()
   {
-    this.router.navigate(['/homepage/add-user'])
+    this.router.navigate(['/homepage/edit-user/'+this.userId]);
   }
 }

@@ -30,8 +30,10 @@
                   [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
         <mat-nav-list class="h-100">
 
-            <div mat-list-item class="list-item active-nav-tab" [routerLink]="['homepage']" [routerLinkActive]="['active-nav-tab']">Dashboard</div>
-            <div mat-list-item class="list-item" [routerLink]="['users']" [routerLinkActive]="['active-nav-tab']">User</div>
+            <div mat-list-item class="list-item active-nav-tab" [routerLink]="['homepage']" [routerLinkActive]="['active-nav-tab']"><i class="bi bi-house"></i> Dashboard</div>
+            <div mat-list-item class="list-item" [routerLink]="['users']" [routerLinkActive]="['active-nav-tab']"><i class="bi bi-people-fill"></i> Users</div>
+            <div mat-list-item class="list-item" [routerLink]="['item-types']" [routerLinkActive]="['active-nav-tab']"><i class="fa-solid fa-server"></i> Item Types</div>
+            <div mat-list-item class="list-item" [routerLink]="['items']" [routerLinkActive]="['active-nav-tab']"><i class="fa-solid fa-computer"></i> Items</div>
 
         </mat-nav-list>
       </mat-sidenav>

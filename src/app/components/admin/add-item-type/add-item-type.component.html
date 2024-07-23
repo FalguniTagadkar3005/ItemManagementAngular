@@ -1,0 +1,36 @@
+<div class="h-100 w-100">
+    <h6 class="m-2 mb-3">Admin/AddItemType</h6>
+    <p class="m-2">Item Type Details</p>
+    <form [formGroup]="addItemTypeForm" (ngSubmit)="onSubmit()">
+      <div class="">
+          <div class="m-2 d-flex justify-content-between" style="width:30%;">
+              <label class="form-label">Name:</label>
+              <mat-form-field appearance="outline" class="w-75" style="margin-left:-10px;">
+                  <input matInput formControlName="name" placeholder="Ex. Mouse" #input>
+
+                <mat-error *ngIf="getControls['name'].invalid && getControls['name'].errors">                 
+                    <div class="error-message" *ngIf="getControls['name']!.errors['required']">Name is required</div>
+                </mat-error>
+                </mat-form-field>
+          </div>
+  
+          <div class="m-2 d-flex justify-content-between" style="width:30%;">
+              <label class="form-label">Description:</label>
+                <mat-form-field appearance="outline" class="w-75">
+                <input matInput formControlName="description" placeholder="Ex. Wireless mouse from HP" #input>
+
+              </mat-form-field>
+            </div>
+
+          
+          <div class="m-2 d-flex justify-content-end" style="width:30%">
+              <div class="m-2">
+                  <button class="btn btn-success" type="submit">Add Item Type</button>
+              </div>
+              <div class="m-2">
+                  <button type="button" class="btn btn-secondary" (click)="onClear()">Clear</button>
+              </div>
+          </div>
+        </div>
+    </form>
+</div>

@@ -4,7 +4,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormBuilder,FormGroup,Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AdminService } from '../../../services/admin.service';
-import { addOrEditUserRequest } from '../../../DTO/admin';
+import { addUserRequest } from '../../../DTO/admin';
 import { apiResponse } from '../../../DTO/customObjects';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar,MatSnackBarModule } from '@angular/material/snack-bar';
@@ -34,7 +34,7 @@ export class AddUserComponent {
   }
 
   public AddUser(): void {
-    let body :addOrEditUserRequest= {
+    let body :addUserRequest= {
       name:this.getControls['name'].value,
       email:this.getControls['email'].value,
       password:this.getControls['password'].value,
