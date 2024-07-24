@@ -5,7 +5,7 @@ import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { apiResponse} from '../../../DTO/customObjects';
-import { allItemTypesRequest, ItemTypesResponse, allItemTypesResponseWithCount } from '../../../DTO/admin';
+import { allItemTypesRequest, itemTypeResponse, allItemTypesResponseWithCount } from '../../../DTO/admin';
 import { AdminService } from '../../../services/admin.service';
 import { Router, RouterModule } from '@angular/router';
 import {  FormBuilder,FormGroup,Validators,ReactiveFormsModule  } from '@angular/forms';
@@ -26,7 +26,7 @@ import { MatSnackBar,MatSnackBarLabel,MatSnackBarModule } from '@angular/materia
 export class ItemTypesComponent implements AfterViewInit {
 
   displayedColumns: string[] = ['name', 'description','itemTypeId'];
-  dataSource:MatTableDataSource<ItemTypesResponse>
+  dataSource:MatTableDataSource<itemTypeResponse>
   defaultSortBy : string = 'name';
   defaultSortOrder : string = 'asc';
   totalRecords:number;
@@ -79,13 +79,12 @@ export class ItemTypesComponent implements AfterViewInit {
 
   onSubmit()
   {
+    this.defaultPageNumber = 1;
+    this.defaultPageSize=5;
     this.GetAllItemTypes(this.getName?.value,this.defaultPageNumber,this.defaultPageSize);
   }
 
-  public addItemType(){
-    this.router.navigate(['/homepage/add-item-type']);
-  }
-
+  
   announceSortChange(sortState: Sort) {
     console.log(sortState.active+" "+sortState.direction);
     if(sortState.direction)
@@ -95,7 +94,7 @@ export class ItemTypesComponent implements AfterViewInit {
       this.GetAllItemTypes(this.getName?.value,this.defaultPageNumber,this.defaultPageSize);
     }
   }
-
+  
   onPageChangeEvent(event:PageEvent)
   {
     this.defaultPageNumber = event.pageIndex+1;
@@ -106,9 +105,15 @@ export class ItemTypesComponent implements AfterViewInit {
   onReset()
   {
     this.nameFilter = "";
+    this.defaultPageNumber = 1;
+    this.defaultPageSize = 5;
     this.GetAllItemTypes("",this.defaultPageNumber,this.defaultPageSize);
   }
   
+  addItemType(){
+    this.router.navigate(['/homepage/add-item-type']);
+  }
+
   editItemType(itemTypeId:number)
   {
     this.router.navigate(['/homepage/edit-item-type/'+itemTypeId]);

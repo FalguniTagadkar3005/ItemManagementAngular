@@ -57,4 +57,8 @@ export class SharedServicesService {
     return this.http.post<apiResponse<string>>(this.baseURL+ 'Account/ChangePassword', changePwd,{'headers':headers,'params':params});
   }
 
+  logout()
+  {
+    this._cookieService.delete('Jwt');
+  }
 }

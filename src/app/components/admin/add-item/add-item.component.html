@@ -1,1 +1,62 @@
-<p>add-item works!</p>
+<div class="h-100 w-100">
+    <h6 class="m-2 mb-3">Admin/AddItem</h6>
+    <p class="m-2">Item Details</p>
+    <form [formGroup]="addItemForm" (ngSubmit)="onSubmit()">
+      <div class="">
+          <div class="m-2 d-flex justify-content-between" style="width:30%;">
+              <label class="form-label">Name:</label>
+              <mat-form-field appearance="outline" class="w-75" style="margin-left:-10px;">
+                  <input matInput formControlName="name" placeholder="Ex. LG Smart PC" #input>
+
+                <mat-error *ngIf="getControls['name'].invalid && getControls['name'].errors">                 
+                    <div class="error-message" *ngIf="getControls['name']!.errors['required']">Name is required</div>
+                </mat-error>
+                </mat-form-field>
+          </div>
+  
+          <div class="m-2 d-flex justify-content-between" style="width:30%;">
+              <label class="form-label">ItemType:</label>
+                <mat-form-field appearance="outline" class="w-75">
+                    <select matNativeControl id="mySelectId" formControlName="itemTypeId">
+                        <option *ngFor="let item of itemTypeList" [value]="item.itemTypeId">
+                            {{item.name}}
+                          </option>
+                      </select>
+
+                <mat-error *ngIf="getControls['itemTypeId'].invalid && getControls['itemTypeId'].errors">                 
+                    <div class="error-message" *ngIf="getControls['itemTypeId'].errors['required']">Item Type is required</div>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="m-2 d-flex justify-content-between" style="width:30%;">
+                <label class="form-label">Description:</label>
+                <mat-form-field appearance="outline" class="w-75">
+                    <input matInput formControlName="description"  #input>
+
+                </mat-form-field>
+            </div>
+
+        
+            <div class="m-2 d-flex justify-content-between" style="width:30%;">
+                <label class="form-label">Quantity:</label>
+                  <mat-form-field appearance="outline" class="w-75">   
+                    <input matInput [type]="'number'" formControlName="quantity" #input/>
+  
+                  <mat-error *ngIf="getControls['quantity'].invalid && getControls['quantity'].errors">                 
+                      <div class="error-message" *ngIf="getControls['quantity'].errors['required']">Quantity is required</div>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+          
+          <div class="m-2 d-flex justify-content-end" style="width:30%">
+              <div class="m-2">
+                  <button class="btn btn-success" type="submit">Add Item</button>
+              </div>
+              <div class="m-2">
+                  <button type="button" class="btn btn-secondary" (click)="onClear()">Clear</button>
+              </div>
+          </div>
+        </div>
+    </form>
+</div>

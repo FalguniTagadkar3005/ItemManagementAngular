@@ -4,7 +4,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormBuilder,FormGroup,Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AdminService } from '../../../services/admin.service';
-import { addOrEditItemTypeRequest, ItemTypesResponse, editUserRequest, userResponse } from '../../../DTO/admin';
+import { addOrEditItemTypeRequest, itemTypeResponse, editUserRequest, userResponse } from '../../../DTO/admin';
 import { apiResponse } from '../../../DTO/customObjects';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar,MatSnackBarModule } from '@angular/material/snack-bar';
@@ -19,9 +19,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class EditItemTypeComponent {
   editItemTypeForm:FormGroup; 
+  itemType:itemTypeResponse;
+  
   itemTypeId:number;
-
-  itemType:ItemTypesResponse;
   name:string;
   description:string;
 
@@ -52,7 +52,7 @@ export class EditItemTypeComponent {
     this._activatedRoute.paramMap.subscribe(res=>
       {
         this.itemTypeId = parseInt(res.get('id')!);
-        this._service.getItemType(this.itemTypeId).subscribe((res:apiResponse<ItemTypesResponse>)=>
+        this._service.getItemType(this.itemTypeId).subscribe((res:apiResponse<itemTypeResponse>)=>
         {
           this.itemType = res.data;
           this.name = this.itemType.name;

@@ -57,7 +57,7 @@ export interface allItemTypesRequest
     sortingWay:number;
 }
 
-export interface ItemTypesResponse
+export interface itemTypeResponse
 {
     itemTypeId:number;
     name:string;
@@ -66,7 +66,7 @@ export interface ItemTypesResponse
 
 export interface allItemTypesResponseWithCount
 {
-    records:ItemTypesResponse[];
+    records:itemTypeResponse[];
     totalRecords:number;
 }
 
@@ -92,7 +92,7 @@ export interface allItemsRequest
     sortingWay:number;
 }
 
-export interface ItemResponse
+export interface itemResponse
 {
     itemId:number;
     name:string;
@@ -104,12 +104,28 @@ export interface ItemResponse
 
 export interface allItemsResponseWithCount
 {
-    records:ItemResponse[];
+    records:itemResponse[];
     totalRecords:number;
 }
 
 export interface addItemRequest
 {
+    name:string;
+    itemTypeId:number;
+    description:string;
+    quantity:number;
+}
+
+export interface editItemRequest
+{
+    name:string;
+    itemTypeId:number;
+    description:string;
+}
+
+export interface getItemResponse
+{
+    itemId:number;
     name:string;
     itemTypeId:number;
     description:string;

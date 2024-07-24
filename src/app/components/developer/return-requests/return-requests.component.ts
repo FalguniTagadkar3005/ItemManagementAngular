@@ -1,0 +1,116 @@
+import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { apiResponse } from '../../../DTO/customObjects';
+import { Router, RouterModule } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBar, MatSnackBarLabel, MatSnackBarModule } from '@angular/material/snack-bar';
+import { allRequestWithCount, allrequestRequest, request } from '../../../DTO/developer';
+import { DeveloperService } from '../../../services/developer.service';
+import { DatePipe } from '@angular/common';
+
+@Component({
+  selector: 'app-return-requests',
+  standalone: true,
+  imports:[MatFormFieldModule, MatInputModule, MatTableModule, RouterModule,
+    MatSortModule, ReactiveFormsModule, MatPaginatorModule, MatDialogModule, MatSnackBarModule,DatePipe],
+  templateUrl: './return-requests.component.html',
+  styleUrl: './return-requests.component.css'
+})
+export class ReturnRequestsComponent {
+  displayedColumns: string[] = ['date', 'status', 'requestNumber', 'requestId'];
+  dataSource: MatTableDataSource<request>
+  defaultSortBy: string = 'date';
+  defaultSortOrder: string = 'asc';
+  formBuilder: FormBuilder;
+  totalItems: number;
+  defaultPageNumber:number=1;
+  defaultPageSize:number=5;
+  statusIdFilter:number;
+  requestNumberFilter:string;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
+
+  searchFiltersForm: FormGroup;
+
+  constructor(private _service: DeveloperService, private router: Router, private _formBuilder: FormBuilder, private dialog: MatDialog, private _snackBar: MatSnackBar) {
+    this.searchFiltersForm = this._formBuilder.group({
+      statusId: ['', []],
+      requestNumber:['',[]]
+    })
+    this.GetAllReturnRequests("", 0, this.defaultPageNumber, this.defaultPageSize);
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    if (this.dataSource) {
+      this.dataSource.paginator = this.paginator;
+    }
+  }
+
+  public GetAllReturnRequests(requestNumber: string, statusId: number, pageNumber: number, pageSize: number): void {
+    let body: allrequestRequest = {
+      requestNumber: requestNumber,
+      statusId: statusId,
+      pageNumber: pageNumber,
+      pageSize: pageSize,
+      sortingOn: this.defaultSortBy,
+      sortingWay: this.defaultSortOrder == 'asc' ? 1 : 2
+    };
+    this._service.getAllReturnRequests(body).subscribe((res: apiResponse<allRequestWithCount>) => {
+        this.dataSource = new MatTableDataSource(res.data.records);
+        this.totalItems = res.data.totalRecords;
+      });
+  }
+
+  get getControls() {
+    return this.searchFiltersForm.controls;
+  }
+
+  onSubmit() {
+    this.defaultPageNumber = 1;
+    this.defaultPageSize=5;
+    this.GetAllReturnRequests(this.getControls['requestNumber']?.value, this.getControls['statusId']?.value == "" ? 0 : this.getControls['statusId']?.value, this.defaultPageNumber, this.defaultPageSize);
+  }
+
+  public addRequest() {
+    this.router.navigate(['/homepage/add-return-request']);
+  }
+
+  announceSortChange(sortState: Sort) {
+    console.log(sortState.active + " " + sortState.direction);
+    if (sortState.direction) {
+      this.defaultSortBy = sortState.active;
+      this.defaultSortOrder = sortState.direction;
+      this.GetAllReturnRequests(this.getControls['requestNumber']?.value, this.getControls['statusId']?.value == "" ? 0 : this.getControls['statusId']?.value, this.defaultPageNumber, this.defaultPageSize);
+    }
+  }
+
+  onPageChangeEvent(event: PageEvent) {
+    this.defaultPageNumber = event.pageIndex+1;
+    this.defaultPageSize = event.pageSize;
+    this.GetAllReturnRequests(this.getControls['requestNumber']?.value, this.getControls['statusId']?.value == "" ? 0 : this.getControls['statusId']?.value, this.defaultPageNumber, this.defaultPageSize);
+  }
+
+  onReset() {
+    this.requestNumberFilter = "";
+    this.statusIdFilter = 0;
+    this.defaultPageNumber = 1;
+    this.defaultPageSize = 5;
+    this.GetAllReturnRequests(this.getControls['requestNumber']?.value, this.getControls['statusId']?.value == "" ? 0 : this.getControls['statusId']?.value, this.defaultPageNumber, this.defaultPageSize);
+  }
+
+  openSnackBar(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000, // Duration in milliseconds
+    });
+  }
+
+  editRequest(requestId: number) {
+    this.router.navigate(['/homepage/edit-return-request/' + requestId]);
+  }
+}

@@ -42,7 +42,7 @@ export class AddUserComponent {
       roId:15
     };
     this._service.addUser(body).subscribe((res : apiResponse<string>) => {
-      this.openSnackBar("User added successfully","Ok");
+      this.openSnackBar(res.message,"Ok");
     });
   }
 

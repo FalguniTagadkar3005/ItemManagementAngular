@@ -81,6 +81,8 @@ export class UsersComponent implements AfterViewInit {
   }
 
   onSubmit() {
+    this.defaultPageNumber = 1;
+    this.defaultPageSize=5;
     this.GetAllUser(this.getNameOrEmail?.value, this.getRoleId?.value == "" ? 0 : this.getRoleId?.value, this.defaultPageNumber, this.defaultPageSize);
   }
 
@@ -98,7 +100,6 @@ export class UsersComponent implements AfterViewInit {
   }
 
   onPageChangeEvent(event: PageEvent) {
-    debugger
     this.defaultPageNumber = event.pageIndex+1;
     this.defaultPageSize = event.pageSize;
     this.GetAllUser(this.getNameOrEmail?.value, this.getRoleId?.value == "" ? 0 : this.getRoleId?.value,this.defaultPageNumber, this.defaultPageSize);
@@ -107,6 +108,8 @@ export class UsersComponent implements AfterViewInit {
   onReset() {
     this.nameOrEmailFilter = "";
     this.roleIdFilter = 0;
+    this.defaultPageNumber = 1;
+    this.defaultPageSize = 5;
     this.GetAllUser("", 0, this.defaultPageNumber, this.defaultPageSize);
   }
 

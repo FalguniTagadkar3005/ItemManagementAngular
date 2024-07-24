@@ -16,7 +16,7 @@
                   <mat-menu #menu="matMenu">
                     <a mat-menu-item [routerLink]="['myprofile']">My Details</a>
                     <a mat-menu-item [routerLink]="['changepassword']">Change Password</a>
-                    <a mat-menu-item>Logout</a>
+                    <a mat-menu-item (click)="LogOut()">Logout</a>
                   </mat-menu>
             </div>
         </div>
@@ -31,9 +31,17 @@
         <mat-nav-list class="h-100">
 
             <div mat-list-item class="list-item active-nav-tab" [routerLink]="['homepage']" [routerLinkActive]="['active-nav-tab']"><i class="bi bi-house"></i> Dashboard</div>
-            <div mat-list-item class="list-item" [routerLink]="['users']" [routerLinkActive]="['active-nav-tab']"><i class="bi bi-people-fill"></i> Users</div>
-            <div mat-list-item class="list-item" [routerLink]="['item-types']" [routerLinkActive]="['active-nav-tab']"><i class="fa-solid fa-server"></i> Item Types</div>
-            <div mat-list-item class="list-item" [routerLink]="['items']" [routerLinkActive]="['active-nav-tab']"><i class="fa-solid fa-computer"></i> Items</div>
+            @if(role==='Admin')
+            {
+              <div mat-list-item class="list-item" [routerLink]="['users']" [routerLinkActive]="['active-nav-tab']"><i class="bi bi-people-fill"></i> Users</div>
+              <div mat-list-item class="list-item" [routerLink]="['item-types']" [routerLinkActive]="['active-nav-tab']"><i class="fa-solid fa-server"></i> Item Types</div>
+              <div mat-list-item class="list-item" [routerLink]="['items']" [routerLinkActive]="['active-nav-tab']"><i class="fa-solid fa-computer"></i> Items</div>
+            }
+            @if(role==='Developer')
+            {
+              <div mat-list-item class="list-item" [routerLink]="['requests']" [routerLinkActive]="['active-nav-tab']"><i class="bi bi-folder"></i> My Requests</div>
+              <div mat-list-item class="list-item" [routerLink]="['return-requests']" [routerLinkActive]="['active-nav-tab']"><i class="bi bi-folder-symlink"></i> My Return Requests</div>
+            }
 
         </mat-nav-list>
       </mat-sidenav>

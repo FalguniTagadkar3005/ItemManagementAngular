@@ -5,13 +5,13 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { apiResponse } from '../../../DTO/customObjects';
-import { ItemResponse, allItemsRequest, allItemsResponseWithCount, itemTypesForDropdown } from '../../../DTO/admin';
+import { itemResponse, allItemsRequest, allItemsResponseWithCount, itemTypesForDropdown } from '../../../DTO/admin';
 import { AdminService } from '../../../services/admin.service';
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DeleteDialogComponent} from '../../../DTO/admin/delete-dialog/delete-dialog.component';
-import { MatSnackBar, MatSnackBarLabel, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -24,7 +24,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ItemsComponent implements AfterViewInit{
   displayedColumns: string[] = ['name', 'itemType','description','quantity','itemId'];
-  dataSource:MatTableDataSource<ItemResponse>
+  dataSource:MatTableDataSource<itemResponse>
   defaultSortBy : string = 'name';
   defaultSortOrder : string = 'asc';
   totalRecords:number;
@@ -89,6 +89,8 @@ export class ItemsComponent implements AfterViewInit{
 
   onSubmit()
   {
+    this.defaultPageNumber = 1;
+    this.defaultPageSize=5;
     this.GetAllItems(this.getControls['name']?.value, this.getControls['itemTypeId']?.value == "" ? 0 : this.getControls['itemTypeId']?.value, this.defaultPageNumber, this.defaultPageSize);
   }
 
@@ -117,6 +119,8 @@ export class ItemsComponent implements AfterViewInit{
   {
     this.nameFilter = "";
     this.itemTypeIdFilter=0;
+    this.defaultPageNumber = 1;
+    this.defaultPageSize = 5;
     this.GetAllItems(this.getControls['name']?.value, this.getControls['itemTypeId']?.value == "" ? 0 : this.getControls['itemTypeId']?.value, this.defaultPageNumber, this.defaultPageSize);
   }
   
@@ -125,29 +129,34 @@ export class ItemsComponent implements AfterViewInit{
     this.router.navigate(['/homepage/edit-item/'+itemId]);
   }
 
-  // deleteItemDialog(itemId: number): void {
-  //   const dialogRef = this.dialog.open(DeleteDialogComponent, {
-  //     width: '350px',
-  //     data: {
-  //       title: 'Confirm Delete',
-  //       message: 'Are you sure you want to delete this item?'
-  //     }
-  //   });
+  addItem()
+  {
+    this.router.navigate(['/homepage/add-item']);
+  }
 
-  //   dialogRef.afterClosed().subscribe(result => {
-  //     if (result) {
-  //       this.DeleteItem(itemId);
-  //     }
-  //   });
-  // }
+  deleteItemDialog(itemId: number): void {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Confirm Delete',
+        message: 'Are you sure you want to delete this item?'
+      }
+    });
 
-  // public DeleteItem(id:number)
-  // {
-  //   this._service.deleteItem(id).subscribe((res:apiResponse<string>)=>{
-  //     this.openSnackBar(res.message,"Ok");
-  //     this.GetAllItems(this.getControls['name']?.value, this.getControls['itemTypeId']?.value == "" ? 0 : this.getControls['itemTypeId']?.value, this.defaultPageNumber, this.defaultPageSize);
-  //   })
-  // }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.DeleteItem(itemId);
+      }
+    });
+  }
+
+  public DeleteItem(id:number)
+  {
+    this._service.deleteItem(id).subscribe((res:apiResponse<string>)=>{
+      this.openSnackBar(res.message,"Ok");
+      this.GetAllItems(this.getControls['name']?.value, this.getControls['itemTypeId']?.value == "" ? 0 : this.getControls['itemTypeId']?.value, this.defaultPageNumber, this.defaultPageSize);
+    })
+  }
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action, {

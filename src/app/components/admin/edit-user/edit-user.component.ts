@@ -9,7 +9,6 @@ import { apiResponse } from '../../../DTO/customObjects';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar,MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-edit-user',
