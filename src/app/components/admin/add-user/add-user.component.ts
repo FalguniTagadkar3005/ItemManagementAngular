@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { AdminService } from '../../../services/admin.service';
 import { addUserRequest } from '../../../DTO/admin';
 import { apiResponse } from '../../../DTO/customObjects';
-import { CommonModule } from '@angular/common';
+import { CommonModule,Location} from '@angular/common';
 import { MatSnackBar,MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
@@ -20,7 +20,7 @@ import { Router } from '@angular/router';
 export class AddUserComponent {
   addUserForm:FormGroup; 
 
-  constructor(private _service:AdminService,private _formBuilder:FormBuilder,private snackBar:MatSnackBar,private router:Router) {
+  constructor(private _service:AdminService,private _formBuilder:FormBuilder,private snackBar:MatSnackBar,private router:Router,private location:Location) {
     this.addUserForm = this._formBuilder.group({
       name:['',[Validators.required]],
       email:['',[Validators.required,Validators.email]],
@@ -64,4 +64,10 @@ export class AddUserComponent {
   {
     this.router.navigate(['/homepage/add-user'])
   }
+
+  onBackClick()
+  {
+    this.location.back();
+  }
+
 }

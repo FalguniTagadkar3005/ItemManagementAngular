@@ -12,12 +12,14 @@ import { MatSnackBar, MatSnackBarLabel, MatSnackBarModule } from '@angular/mater
 import { allRequestWithCount, allrequestRequest, request } from '../../../DTO/developer';
 import { DeveloperService } from '../../../services/developer.service';
 import { DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { DeleteDialogComponent } from '../../../DTO/admin/delete-user-dialog/delete-dialog.component';
 
 @Component({
   selector: 'app-requests',
   standalone: true,
   imports:[MatFormFieldModule, MatInputModule, MatTableModule, RouterModule,
-    MatSortModule, ReactiveFormsModule, MatPaginatorModule, MatDialogModule, MatSnackBarModule,DatePipe],
+    MatSortModule, ReactiveFormsModule, MatPaginatorModule, MatDialogModule, MatSnackBarModule,DatePipe,CommonModule],
   templateUrl: './requests.component.html',
   styleUrl: './requests.component.css'
 })
@@ -81,6 +83,7 @@ export class RequestsComponent implements AfterViewInit{
     this.router.navigate(['/homepage/add-request']);
   }
 
+
   announceSortChange(sortState: Sort) {
     console.log(sortState.active + " " + sortState.direction);
     if (sortState.direction) {
@@ -113,4 +116,30 @@ export class RequestsComponent implements AfterViewInit{
   editRequest(requestId: number) {
     this.router.navigate(['/homepage/edit-request/' + requestId]);
   }
+
+  public CancelRequest(reqId:number)
+  {
+    this._service.cancelRequest(reqId).subscribe((res:apiResponse<string>)=>
+    {
+      this.openSnackBar(res.message,'OK');
+    })
+    this.router.navigate(['/homepage/requests']);
+  }
+
+  cancelDialog(reqId: number): void {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Confirm Cancellation',
+        message: 'Are you sure you want to cancel this request?'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.CancelRequest(reqId);
+      }
+    });
+  }
+
 }

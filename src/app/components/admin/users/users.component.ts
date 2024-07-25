@@ -10,7 +10,7 @@ import { AdminService } from '../../../services/admin.service';
 import { Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { DeleteDialogComponent} from '../../../DTO/admin/delete-dialog/delete-dialog.component';
+import { DeleteDialogComponent } from '../../../DTO/admin/delete-user-dialog/delete-dialog.component';
 import { MatSnackBar, MatSnackBarLabel, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({

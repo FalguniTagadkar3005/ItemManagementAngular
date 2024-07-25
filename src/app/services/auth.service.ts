@@ -25,9 +25,9 @@ export class AuthService {
     }
    }
 
-   getUserIdFromToken(): string | null {
+   getUserIdFromToken(): string {
     const decodedToken: any = this.getDecodedToken();
-    return decodedToken ? decodedToken.Id : null; // Assuming 'sub' is the key for user ID in your token claims
+    return decodedToken ? decodedToken.Id : '0'; // Assuming 'sub' is the key for user ID in your token claims
   }
 
     getRoleFromToken():string|null

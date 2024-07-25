@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { apiResponse } from '../DTO/customObjects';
 import { allUsersRequest,addUserRequest, userResponse, editUserRequest, allItemTypesRequest, itemTypeResponse, allUsersResponseWithCount, allItemTypesResponseWithCount, addOrEditItemTypeRequest, allItemsRequest, allItemsResponseWithCount, itemTypesForDropdown, addItemRequest, editItemRequest, getItemResponse } from '../DTO/admin';
 import { CookieService } from 'ngx-cookie-service';
+import { getRequestSingleItemResponse } from '../DTO/developer';
 
 @Injectable({
   providedIn: 'root'
@@ -128,4 +129,5 @@ export class AdminService {
     const params = {'id':id}
     return this.http.get<apiResponse<getItemResponse>>(this.baseURL+'Admin/GetItemById',{headers:headers,params:params});
   }
+
 }

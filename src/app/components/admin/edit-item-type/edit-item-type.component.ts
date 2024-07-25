@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { AdminService } from '../../../services/admin.service';
 import { addOrEditItemTypeRequest, itemTypeResponse, editUserRequest, userResponse } from '../../../DTO/admin';
 import { apiResponse } from '../../../DTO/customObjects';
-import { CommonModule } from '@angular/common';
+import { CommonModule,Location } from '@angular/common';
 import { MatSnackBar,MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -26,7 +26,7 @@ export class EditItemTypeComponent {
   description:string;
 
   constructor(private _service:AdminService,private _formBuilder:FormBuilder,private snackBar:MatSnackBar,
-    private router:Router,private _activatedRoute:ActivatedRoute) {
+    private router:Router,private _activatedRoute:ActivatedRoute,private location:Location) {
     this.editItemTypeForm = this._formBuilder.group({
       name:['',[Validators.required]],
       description:['',[]],
@@ -79,4 +79,10 @@ export class EditItemTypeComponent {
   {
     this.router.navigate(['/homepage/edit-item-type/'+this.itemTypeId])
   }
+
+  onBackClick()
+  {
+    this.location.back();
+  }
+
 }

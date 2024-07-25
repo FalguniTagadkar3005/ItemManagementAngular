@@ -1,0 +1,167 @@
+<div class="h-100 w-100">
+    <h6 class="m-2 m-3"><span><button (click)="onBackClick()" class="back-button btn btn-primary"><i class="bi bi-arrow-left"></i> Back</button></span> Admin/Edit-Return-Request</h6>
+    <p class="m-2">Request Details</p>
+    
+      <div class="">
+          <div class="m-2 d-flex justify-content-between" style="width:30%;">
+              <label class="form-label field-name">Requested Date:</label>
+              <div class="w-75" style="margin-left:-10px;">
+                  <div>{{requestDetails.date | date:'longDate'}}</div>
+               </div>
+          </div>
+
+
+          <div class="m-2 d-flex justify-content-between" style="width:30%;">
+            <label class="form-label field-name">Request Number:</label>
+            <div class="w-75" style="margin-left:-10px;">
+                <div>{{requestDetails.requestNumber}}</div>
+             </div>
+          </div>
+  
+          <div class="m-2 d-flex justify-content-between" style="width:30%;">
+            <label class="form-label field-name">Type:</label>
+            <div class="w-75" style="margin-left:-10px;">
+                <div>{{requestDetails.requestType==1?'Request':'Return Request'}}</div>
+             </div>
+          </div>
+
+          <div class="m-2 d-flex justify-content-between" style="width:30%;">
+            <label class="form-label field-name">Status:</label>
+            <div class="w-75" style="margin-left:-10px;">
+                <div>{{requestDetails.status}}</div>
+             </div>
+          </div>
+
+          <div class="m-2">
+            <label class="form-label field-name">Items:</label>
+            <!-- below div contains available items and edit item form  -->
+            <div class="d-none" id="editItemForm">
+            <p>Available Items with Me</p>
+            <div class="mat-elevation-z8 m-2">
+                <table mat-table [dataSource]="dataSourceAvailable" #availableItemsTable> 
+                  <!-- ID Column -->
+                  <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Item </th>
+                    <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+                  </ng-container>
+            
+                  <ng-container matColumnDef="itemType">
+                    <th mat-header-cell *matHeaderCellDef> Item Type </th>
+                    <td mat-cell *matCellDef="let row"> {{row.itemType}}</td>
+                  </ng-container>
+            
+                  <ng-container matColumnDef="quantity">
+                    <th mat-header-cell *matHeaderCellDef> Quantity </th>
+                    <td mat-cell *matCellDef="let row"> {{row.quantity}}</td>
+                  </ng-container>
+            
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+            <form [formGroup]="editRequestForm" (ngSubmit)="onAddClick()">
+                <div class="d-flex justify-content-between">
+                    <div class="filter-div d-flex">
+                        
+                        <div class=" m-2">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Select Item Type</mat-label>
+                                <select matNativeControl formControlName="itemTypeId" (change)="onChangeItemType($event)">
+                                    <option value="0" disabled selected>Select</option>
+                        <option *ngFor="let itemType of itemTypeList" [value]="itemType.itemTypeId">
+                            {{itemType.name}}
+                        </option>
+                    </select>
+                    
+                    <mat-error *ngIf="getControls['itemTypeId'].invalid && getControls['itemTypeId'].errors">                 
+                        <div class="error-message" *ngIf="getControls['itemTypeId'].errors['required']">Item Type is required</div>
+                    </mat-error>
+                </mat-form-field>
+            </div> 
+            <div class="m-2">
+                <mat-form-field appearance="outline">
+                    <mat-label>Select Item</mat-label>
+                    <select matNativeControl  formControlName="itemId">
+                        <option value="0" disabled selected>Select</option>
+                        <option *ngFor="let item of itemList" [value]="item.itemId">
+                            {{item.name}}
+                        </option>
+                    </select>
+                    
+                    <mat-error *ngIf="getControls['itemId'].invalid && getControls['itemId'].errors">                 
+                        <div class="error-message" *ngIf="getControls['itemId'].errors['required']">Item is required</div>
+                    </mat-error>
+                </mat-form-field>
+            </div>  
+            <div class="m-2">
+                <mat-form-field appearance="outline">
+                    <mat-label>Quantity</mat-label>
+                    <input matInput [type]="'number'" formControlName="quantity" #input/>
+                    
+                    <mat-error *ngIf="getControls['quantity'].invalid && getControls['quantity'].errors">                 
+                        <div class="error-message" *ngIf="getControls['quantity'].errors['required']">Quantity is required</div>
+                    </mat-error>
+                </mat-form-field>
+                </div>  
+            </div>
+        </div>
+        <div class="m-2 d-flex">
+            <div>
+                <button class="btn btn-primary" type="submit">Add</button>
+            </div>
+            <div>
+                    <button class="btn btn-secondary ml-2" type="button" (click)="onClear()">Clear</button>
+                </div>
+            </div>
+        </form>
+        </div>
+            
+        <div class="mat-elevation-z8 m-2">
+            <table mat-table [dataSource]="dataSource"  #selectedItemsTable>
+        
+                <!-- ID Column -->
+                <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Item </th>
+                <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="itemType">
+                <th mat-header-cell *matHeaderCellDef> Item Type </th>
+                <td mat-cell *matCellDef="let row"> {{row.itemType}}</td>
+                </ng-container>
+        
+                <ng-container matColumnDef="quantity">
+                <th mat-header-cell *matHeaderCellDef> Quantity </th>
+                <td mat-cell *matCellDef="let row"> {{row.quantity}}</td>
+                </ng-container>
+        
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>       
+        </div>
+    </div>
+
+    <div class=""  id="editAndCancel">
+    <div class="m-2 d-flex " style="width:30%" *ngIf="requestDetails.statusId===1">
+        <div>
+            <button type="button" class="btn btn-warning" (click)="onEditClick()">Edit</button>
+        </div>
+        
+        <div>
+            <button type="button" class="btn btn-success ml-2" (click)="onSubmit()">Submit</button>
+        </div>
+    </div>
+    </div>
+          
+    <div class="d-none"  id="saveAndSubmit">
+    <div class="m-2 d-flex" style="width:30%">
+        <div>
+            <button type="button" class="btn btn-warning ml-2" (click)="onSave()">Save</button>
+        </div>     
+        <div>
+            <button type="button" class="btn btn-success ml-2" (click)="onSubmit()">Submit</button>
+        </div>
+    </div>
+    </div>
+</div>
+</div>

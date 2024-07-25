@@ -42,6 +42,11 @@
               <div mat-list-item class="list-item" [routerLink]="['requests']" [routerLinkActive]="['active-nav-tab']"><i class="bi bi-folder"></i> My Requests</div>
               <div mat-list-item class="list-item" [routerLink]="['return-requests']" [routerLinkActive]="['active-nav-tab']"><i class="bi bi-folder-symlink"></i> My Return Requests</div>
             }
+            @if(role==='NetworkAdmin')
+            {
+              <div mat-list-item class="list-item" [routerLink]="['purchase-requests']" [routerLinkActive]="['active-nav-tab']"><i class="bi bi-folder"></i> My Purchase Requests</div>
+              <div mat-list-item class="list-item" [routerLink]="['developer-requests']" [routerLinkActive]="['active-nav-tab']"><i class="bi bi-folder"></i> Developer Requests</div>
+            }
 
         </mat-nav-list>
       </mat-sidenav>

@@ -1,5 +1,5 @@
 <div class="h-100 w-100">
-    <h6 class="m-2 m-3"><span><button (click)="onBackClick()" class="back-button btn btn-primary"><i class="bi bi-arrow-left"></i> Back</button></span> Developer/AddRequest</h6>
+    <h6 class="m-2 m-3"><span><button (click)="onBackClick()" class="back-button btn btn-primary"><i class="bi bi-arrow-left"></i> Back</button></span> Network-Admin/Add-Purchase-Request</h6>
     <form [formGroup]="addRequestForm" (ngSubmit)="onAdd()">
       <div class="d-flex justify-content-between">
         <div class="filter-div d-flex">
@@ -86,9 +86,6 @@
     </div>
 
     <div class="d-flex m-2" *ngIf="selectedItemListForDisplay.length>0">
-        <div>
-            <button type="button" class="btn btn-warning" (click)="onSave()">Save</button>
-        </div>
         <div>
             <button type="button" class="btn btn-success ml-2" (click)="onSubmit()">Submit</button>
         </div>

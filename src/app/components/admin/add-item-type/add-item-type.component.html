@@ -1,5 +1,5 @@
 <div class="h-100 w-100">
-    <h6 class="m-2 mb-3">Admin/AddItemType</h6>
+    <h6 class="m-2 m-3"><span><button (click)="onBackClick()" class="back-button btn btn-primary"><i class="bi bi-arrow-left"></i> Back</button></span> Admin/AddItemType</h6>
     <p class="m-2">Item Type Details</p>
     <form [formGroup]="addItemTypeForm" (ngSubmit)="onSubmit()">
       <div class="">

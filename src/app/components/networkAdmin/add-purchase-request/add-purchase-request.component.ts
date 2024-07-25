@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
+import {  Component, Inject, ViewChild } from '@angular/core';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatTable, MatTableModule } from '@angular/material/table';
@@ -13,16 +13,18 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule,Location } from '@angular/common';
 import { addRequest, displayItemForRequest, itemsForDropdown, selectedItemForRequest } from '../../../DTO/developer';
 import { DeveloperService } from '../../../services/developer.service';
+import { NetworkAdminService } from '../../../services/network-admin.service';
+import { addPurchaseRequest } from '../../../DTO/networkAdmin';
 
 @Component({
-  selector: 'app-add-request',
+  selector: 'app-add-purchase-request',
   standalone: true,
   imports:  [MatFormFieldModule, MatInputModule, MatTableModule, RouterModule,
     MatSortModule, ReactiveFormsModule, MatPaginatorModule, MatDialogModule, MatSnackBarModule,CommonModule],
-  templateUrl: './add-request.component.html',
-  styleUrl: './add-request.component.css'
+  templateUrl: './add-purchase-request.component.html',
+  styleUrl: './add-purchase-request.component.css'
 })
-export class AddRequestComponent {
+export class AddPurchaseRequestComponent {
   displayedColumns: string[] = ['name', 'itemType','quantity'];
   totalRecords:number;
   formBuilder:FormBuilder;
@@ -32,13 +34,16 @@ export class AddRequestComponent {
   
   selectedItemListForRequest:selectedItemForRequest[]=[];
   selectedItemListForDisplay:displayItemForRequest[]=[];
+
+  //form fields
   itemTypeId:number;
   itemId:number;
   quantity:number;
+
   addRequestForm:FormGroup; 
   @ViewChild(MatTable) table: MatTable<any>;
   dataSource:displayItemForRequest[] = this.selectedItemListForDisplay;
-  constructor(private _service:DeveloperService,private router: Router,private _formBuilder:FormBuilder,
+  constructor(private _service:NetworkAdminService,private router: Router,private _formBuilder:FormBuilder,
     private dialog:MatDialog,private _snackBar:MatSnackBar,private location:Location) {
 
     this.addRequestForm = this._formBuilder.group({
@@ -66,14 +71,15 @@ export class AddRequestComponent {
     })
   }
 
-  public AddRequest(request:addRequest)
+  public AddPurchaseRequest(request:addPurchaseRequest)
   {
-    this._service.addRequest(request).subscribe((res:apiResponse<string>)=>
+    this._service.addPurchaseRequest(request).subscribe((res:apiResponse<string>)=>
     {
       this.openSnackBar(res.message,'Ok');
     })
-    this.router.navigate(['/homepage/requests']);
+    this.router.navigate(['/homepage/purchase-requests']);
   }
+
   getItemName(itemId:number)
   {
     const item = this.itemList.find(item => item.itemId == itemId);
@@ -133,22 +139,12 @@ export class AddRequestComponent {
       duration: 2000, // Duration in milliseconds
     });}
 
-  onSave()
-  {
-    let body :addRequest={
-      items:this.selectedItemListForRequest,
-      submit:false
-    }
-    this.AddRequest(body);
-  }
-
   onSubmit()
   {
-    let body:addRequest = {
+    let body:addPurchaseRequest = {
       items:this.selectedItemListForRequest,
-      submit:true
     }
-    this.AddRequest(body);
+    this.AddPurchaseRequest(body);
 
   }
 

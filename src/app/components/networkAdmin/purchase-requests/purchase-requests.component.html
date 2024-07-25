@@ -1,0 +1,56 @@
+<div class="h-100 w-100">
+    <h6 class="m-2">Network-Admin/Get-All-Purchase-Requests</h6>
+    <form [formGroup]="searchFiltersForm" (ngSubmit)="onSubmit()">
+      <div class="d-flex justify-content-between">
+        <div class="filter-div d-flex">
+          <div class="filter m-2">
+            <mat-form-field appearance="outline" class="me-2">
+              <mat-label>Search by InvoiceNumber</mat-label>
+              <input matInput formControlName="invoiceNumber" #input [ngModel]="invoiceNumberFilter">
+            </mat-form-field>
+          </div>
+  
+          <div class="m-2">
+            <button class="btn btn-success" type="submit">Search</button>
+          </div>
+          <div class="m-2">
+            <button type="button" class="btn btn-secondary" (click)="onReset()">Reset</button>
+          </div>
+        </div>
+        <div>
+          <button type="button" class="btn btn-primary m-2" (click)="addRequest()"><i class="bi bi-plus-square"></i>&nbsp;Add Purchase Request</button>
+        </div>
+      </div>
+    </form>
+  
+    <div class="mat-elevation-z8 m-2">
+      <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)">
+  
+        <!-- ID Column -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </th>
+          <td mat-cell *matCellDef="let row"> {{row.date | date:'longDate'}} </td>
+        </ng-container>
+
+  
+        <ng-container matColumnDef="invoiceNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Invoice Number </th>
+          <td mat-cell *matCellDef="let row"> {{row.invoiceNumber}}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="purchaseRequestId">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let row"><a><button class="btn btn-outline-success" type="button">View</button></a>         
+          </td>
+        </ng-container>
+        
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+  
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" [length]="totalItems" (page)="onPageChangeEvent($event)"
+        aria-label="Select page of periodic elements">
+      </mat-paginator>
+  
+    </div>
+  </div>

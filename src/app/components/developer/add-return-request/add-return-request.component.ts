@@ -11,18 +11,19 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule,Location } from '@angular/common';
-import { addRequest, displayItemForRequest, itemsForDropdown, selectedItemForRequest } from '../../../DTO/developer';
+import { addRequest, displayItemForRequest, getAvailableItemsRequest, getRequestSingleItemResponse, itemsForDropdown, selectedItemForRequest } from '../../../DTO/developer';
 import { DeveloperService } from '../../../services/developer.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
-  selector: 'app-add-request',
+  selector: 'app-add-return-request',
   standalone: true,
-  imports:  [MatFormFieldModule, MatInputModule, MatTableModule, RouterModule,
+  imports: [MatFormFieldModule, MatInputModule, MatTableModule, RouterModule,
     MatSortModule, ReactiveFormsModule, MatPaginatorModule, MatDialogModule, MatSnackBarModule,CommonModule],
-  templateUrl: './add-request.component.html',
-  styleUrl: './add-request.component.css'
+  templateUrl: './add-return-request.component.html',
+  styleUrl: './add-return-request.component.css'
 })
-export class AddRequestComponent {
+export class AddReturnRequestComponent {
   displayedColumns: string[] = ['name', 'itemType','quantity'];
   totalRecords:number;
   formBuilder:FormBuilder;
@@ -32,20 +33,24 @@ export class AddRequestComponent {
   
   selectedItemListForRequest:selectedItemForRequest[]=[];
   selectedItemListForDisplay:displayItemForRequest[]=[];
+  availableItemListForDisplay:displayItemForRequest[] = [];
   itemTypeId:number;
   itemId:number;
   quantity:number;
   addRequestForm:FormGroup; 
-  @ViewChild(MatTable) table: MatTable<any>;
+  @ViewChild("selectedItemsTable") table: MatTable<any>;
+  @ViewChild("availableItemsTable") tableAvailable: MatTable<any>;
   dataSource:displayItemForRequest[] = this.selectedItemListForDisplay;
+  dataSourceAvailable:displayItemForRequest[] = this.availableItemListForDisplay;
   constructor(private _service:DeveloperService,private router: Router,private _formBuilder:FormBuilder,
-    private dialog:MatDialog,private _snackBar:MatSnackBar,private location:Location) {
+            private _snackBar:MatSnackBar,private authService:AuthService,private location:Location) {
 
     this.addRequestForm = this._formBuilder.group({
       itemTypeId:['',[Validators.required]],
       itemId:['',[Validators.required]],
       quantity:['',[Validators.required]]
     })
+    this.GetAvailableItems();
     this.GetAllItemTypes();
   }
 
@@ -66,14 +71,42 @@ export class AddRequestComponent {
     })
   }
 
-  public AddRequest(request:addRequest)
+  public AddReturnRequest(request:addRequest)
   {
-    this._service.addRequest(request).subscribe((res:apiResponse<string>)=>
+    this._service.addReturnRequest(request).subscribe((res:apiResponse<string>)=>
     {
       this.openSnackBar(res.message,'Ok');
     })
-    this.router.navigate(['/homepage/requests']);
+    this.router.navigate(['/homepage/return-requests']);
   }
+
+  public GetAvailableItems()
+  {
+    let body:getAvailableItemsRequest={
+      name:"",
+      pageNumber:1,
+      pageSize:10,
+      sortingOn:"",
+      sortingWay:1
+    }
+    this._service.getAvailableItems(body).subscribe((res:apiResponse<getRequestSingleItemResponse[]>)=>
+    {
+        for(var item of res.data)
+        {
+            var newItem:displayItemForRequest=
+            {
+              name:item.name,
+              itemType:item.itemType,
+              quantity:item.quantity
+            };
+            this.availableItemListForDisplay.push(newItem);
+        }
+        this.dataSourceAvailable = this.availableItemListForDisplay;
+        this.tableAvailable.renderRows();
+    })
+    
+  }
+
   getItemName(itemId:number)
   {
     const item = this.itemList.find(item => item.itemId == itemId);
@@ -118,7 +151,7 @@ export class AddRequestComponent {
       if (!this.isItemIdExists(newItem.itemId)) {
         this.selectedItemListForRequest.push(newItem);
         this.selectedItemListForDisplay.push(newItemToDisplay);
-        this.dataSource = this.selectedItemListForDisplay;
+        this.dataSource = this.selectedItemListForDisplay.slice();
         this.table.renderRows();
         this.addRequestForm.reset;
       } else {
@@ -139,7 +172,7 @@ export class AddRequestComponent {
       items:this.selectedItemListForRequest,
       submit:false
     }
-    this.AddRequest(body);
+    this.AddReturnRequest(body);
   }
 
   onSubmit()
@@ -148,7 +181,7 @@ export class AddRequestComponent {
       items:this.selectedItemListForRequest,
       submit:true
     }
-    this.AddRequest(body);
+    this.AddReturnRequest(body);
 
   }
 

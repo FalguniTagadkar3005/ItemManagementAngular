@@ -9,6 +9,7 @@ import { apiResponse } from '../../../DTO/customObjects';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar,MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-add-item',
@@ -20,14 +21,14 @@ import { Router } from '@angular/router';
 export class AddItemComponent {
   addItemForm:FormGroup; 
   itemTypeList:itemTypesForDropdown[];
-  constructor(private _service:AdminService,private _formBuilder:FormBuilder,private snackBar:MatSnackBar,private router:Router) {
+  constructor(private _service:AdminService,private _formBuilder:FormBuilder,private snackBar:MatSnackBar,private router:Router,private location:Location) {
     this.addItemForm = this._formBuilder.group({
       name:['',[Validators.required]],
       itemTypeId:['',[Validators.required]],
       description:['',[]],
       quantity:['',Validators.required]
     })
-    
+
     this.GetAllItemTypes();
   }
 
@@ -73,4 +74,10 @@ export class AddItemComponent {
   {
     this.router.navigate(['/homepage/add-item'])
   }
+
+  onBackClick()
+  {
+    this.location.back();
+  }
+
 }

@@ -20,6 +20,13 @@ import { RequestsComponent } from './components/developer/requests/requests.comp
 import { AuthGuardDeveloperService } from './guards/auth-guard-developer.service';
 import { AddRequestComponent } from './components/developer/add-request/add-request.component';
 import { ReturnRequestsComponent } from './components/developer/return-requests/return-requests.component';
+import { EditRequestComponent } from './components/developer/edit-request/edit-request.component';
+import { AddReturnRequestComponent } from './components/developer/add-return-request/add-return-request.component';
+import { EditReturnRequestComponent } from './components/developer/edit-return-request/edit-return-request.component';
+import { PurchaseRequestsComponent } from './components/networkAdmin/purchase-requests/purchase-requests.component';
+import { AuthGuardNetworkAdminService } from './guards/auth-guard-network-admin.service';
+import { DeveloperRequestsComponent } from './components/networkAdmin/developer-requests/developer-requests.component';
+import { AddPurchaseRequestComponent } from './components/networkAdmin/add-purchase-request/add-purchase-request.component';
 
 export const routes: Routes = [
     {path:'login',component:LoginComponent},
@@ -41,6 +48,13 @@ export const routes: Routes = [
         {path:'requests',component:RequestsComponent,canActivate:[AuthGuardDeveloperService]},
         {path:'return-requests',component:ReturnRequestsComponent,canActivate:[AuthGuardDeveloperService]},
         {path:'add-request',component:AddRequestComponent,canActivate:[AuthGuardDeveloperService]},
+        {path:'edit-request/:id',component:EditRequestComponent,canActivate:[AuthGuardDeveloperService]},
+        {path:'add-return-request',component:AddReturnRequestComponent,canActivate:[AuthGuardDeveloperService]},
+        {path:'edit-return-request/:id',component:EditReturnRequestComponent,canActivate:[AuthGuardDeveloperService]},
+
+        {path:'purchase-requests',component:PurchaseRequestsComponent,canActivate:[AuthGuardNetworkAdminService]},
+        {path:'developer-requests',component:DeveloperRequestsComponent,canActivate:[AuthGuardNetworkAdminService]},
+        {path:'add-purchase-request',component:AddPurchaseRequestComponent,canActivate:[AuthGuardNetworkAdminService]}
      ]},
     {path:'forgotpassword',component:ForgotPasswordComponent},
     {path:'resetpassword/:id',component:ResetPasswordComponent},

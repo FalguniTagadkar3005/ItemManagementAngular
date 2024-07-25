@@ -1,30 +1,32 @@
 import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
-import { MatSortModule, Sort } from '@angular/material/sort';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSortModule  } from '@angular/material/sort';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { apiResponse } from '../../../DTO/customObjects';
 import { itemTypesForDropdown } from '../../../DTO/admin';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule,Location } from '@angular/common';
-import { addRequest, displayItemForRequest, itemsForDropdown, selectedItemForRequest } from '../../../DTO/developer';
+import { addRequest, displayItemForRequest, getAvailableItemsRequest, getRequestByIdResponse, getRequestSingleItemResponse, itemsForDropdown, selectedItemForRequest } from '../../../DTO/developer';
 import { DeveloperService } from '../../../services/developer.service';
 
 @Component({
-  selector: 'app-add-request',
+  selector: 'app-edit-return-request',
   standalone: true,
-  imports:  [MatFormFieldModule, MatInputModule, MatTableModule, RouterModule,
+  imports:[MatFormFieldModule, MatInputModule, MatTableModule, RouterModule,
     MatSortModule, ReactiveFormsModule, MatPaginatorModule, MatDialogModule, MatSnackBarModule,CommonModule],
-  templateUrl: './add-request.component.html',
-  styleUrl: './add-request.component.css'
+  templateUrl: './edit-return-request.component.html',
+  styleUrl: './edit-return-request.component.css'
 })
-export class AddRequestComponent {
+export class EditReturnRequestComponent {
+  requestDetails:getRequestByIdResponse;
+  reqId:number;
+
   displayedColumns: string[] = ['name', 'itemType','quantity'];
-  totalRecords:number;
   formBuilder:FormBuilder;
   
   itemTypeList:itemTypesForDropdown[];
@@ -32,21 +34,26 @@ export class AddRequestComponent {
   
   selectedItemListForRequest:selectedItemForRequest[]=[];
   selectedItemListForDisplay:displayItemForRequest[]=[];
+  availableItemListForDisplay:displayItemForRequest[] = [];
+  //fields for form
   itemTypeId:number;
   itemId:number;
   quantity:number;
-  addRequestForm:FormGroup; 
-  @ViewChild(MatTable) table: MatTable<any>;
-  dataSource:displayItemForRequest[] = this.selectedItemListForDisplay;
-  constructor(private _service:DeveloperService,private router: Router,private _formBuilder:FormBuilder,
-    private dialog:MatDialog,private _snackBar:MatSnackBar,private location:Location) {
+  editRequestForm:FormGroup; 
 
-    this.addRequestForm = this._formBuilder.group({
+  @ViewChild("selectedItemsTable") table: MatTable<any>;
+  @ViewChild("availableItemsTable") tableAvailable: MatTable<any>;
+  dataSource:displayItemForRequest[] = this.selectedItemListForDisplay;
+  dataSourceAvailable:displayItemForRequest[] = this.availableItemListForDisplay;
+  constructor(private _service:DeveloperService,private router: Router,private _formBuilder:FormBuilder,
+              private _snackBar:MatSnackBar,private _activatedRoute:ActivatedRoute,private location:Location) {
+
+    this.editRequestForm = this._formBuilder.group({
       itemTypeId:['',[Validators.required]],
       itemId:['',[Validators.required]],
       quantity:['',[Validators.required]]
     })
-    this.GetAllItemTypes();
+    this.GetRequestDetail();
   }
 
   public GetAllItemTypes()
@@ -66,14 +73,82 @@ export class AddRequestComponent {
     })
   }
 
-  public AddRequest(request:addRequest)
-  {
-    this._service.addRequest(request).subscribe((res:apiResponse<string>)=>
-    {
-      this.openSnackBar(res.message,'Ok');
-    })
-    this.router.navigate(['/homepage/requests']);
+  public GetRequestDetail(){
+    this._activatedRoute.paramMap.subscribe(res=>
+      {
+        this.reqId = parseInt(res.get('id')!);
+        this._service.getRequest(this.reqId).subscribe((res:apiResponse<getRequestByIdResponse>)=>
+        {
+          this.requestDetails = res.data;
+
+          for(var item of res.data.items)
+          {
+            var newItem : selectedItemForRequest ={
+              itemId :item.itemId,
+              quantity:item.quantity
+            }
+  
+            var newItemToDisplay:displayItemForRequest={
+              name:item.name,
+              itemType:item.itemType,
+              quantity:item.quantity
+            }
+  
+            this.selectedItemListForRequest.push(newItem);
+            this.selectedItemListForDisplay.push(newItemToDisplay);
+          }
+          this.dataSource = this.selectedItemListForDisplay;
+          this.table.renderRows();
+        })
+      })
   }
+    
+  public GetAvailableItems()
+  {
+    let body:getAvailableItemsRequest={
+      name:"",
+      pageNumber:1,
+      pageSize:10,
+      sortingOn:"",
+      sortingWay:1
+    }
+    this._service.getAvailableItems(body).subscribe((res:apiResponse<getRequestSingleItemResponse[]>)=>
+    {
+        for(var item of res.data)
+        {
+            var newItem:displayItemForRequest=
+            {
+              name:item.name,
+              itemType:item.itemType,
+              quantity:item.quantity
+            };
+            this.availableItemListForDisplay.push(newItem);
+        }
+        this.dataSourceAvailable = this.availableItemListForDisplay;
+        this.tableAvailable.renderRows();
+    })
+    
+  }
+
+  public EditReturnRequest(request:addRequest)
+  {
+    this._service.editReturnRequest(this.reqId,request).subscribe((res:apiResponse<string>)=>
+    {
+      this.openSnackBar(res.message,'OK');
+    })
+    this.router.navigate(['/homepage/return-requests']);
+  }
+  
+  onEditClick()
+  {
+    document.getElementById('editItemForm')?.classList.remove('d-none');
+    document.getElementById('editAndCancel')?.classList.add('d-none');
+    document.getElementById('saveAndSubmit')?.classList.remove('d-none');
+     this.GetAllItemTypes();
+     this.GetAvailableItems();
+  }
+
+  //used when user add new item to fetch name
   getItemName(itemId:number)
   {
     const item = this.itemList.find(item => item.itemId == itemId);
@@ -88,7 +163,7 @@ export class AddRequestComponent {
 
   get getControls()
   {
-    return this.addRequestForm.controls;
+    return this.editRequestForm.controls;
   }
 
   isItemIdExists(itemId: number): boolean {
@@ -99,9 +174,8 @@ export class AddRequestComponent {
     this.GetAllItems(parseInt((event.target as HTMLSelectElement).value));
   }
 
-  onAdd()
+  onAddClick()
   {
-    debugger;
     if(this.getControls['itemTypeId'].valid && this.getControls['itemId'].valid && this.getControls['quantity'].valid)
     {
       const newItem: selectedItemForRequest = {
@@ -120,10 +194,9 @@ export class AddRequestComponent {
         this.selectedItemListForDisplay.push(newItemToDisplay);
         this.dataSource = this.selectedItemListForDisplay;
         this.table.renderRows();
-        this.addRequestForm.reset;
+        this.editRequestForm.reset;
       } else {
-        // Handle case where itemId already exists (e.g., show error message)
-        console.log('Item ID already exists in the list.');
+        this.openSnackBar("Item already exists","Ok");
       }
     }
   }
@@ -139,7 +212,7 @@ export class AddRequestComponent {
       items:this.selectedItemListForRequest,
       submit:false
     }
-    this.AddRequest(body);
+    this.EditReturnRequest(body);
   }
 
   onSubmit()
@@ -148,7 +221,7 @@ export class AddRequestComponent {
       items:this.selectedItemListForRequest,
       submit:true
     }
-    this.AddRequest(body);
+    this.EditReturnRequest(body);
 
   }
 

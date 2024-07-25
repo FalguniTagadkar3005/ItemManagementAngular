@@ -72,3 +72,30 @@ export interface addRequest
     items:selectedItemForRequest[];
     submit:boolean;
 }
+
+export interface getRequestSingleItemResponse
+{
+    itemId:number;
+    name:string;
+    itemType:string;
+    quantity:number;
+}
+export interface getRequestByIdResponse
+{
+    requestId:number;
+    date:Date;
+    requestType:number;
+    statusId:number;
+    status:string;
+    requestNumber:string;
+    items:getRequestSingleItemResponse[];
+}
+
+export interface getAvailableItemsRequest
+{
+    name:string;
+    pageNumber:number;
+    pageSize:number;
+    sortingOn:string;
+    sortingWay:number;
+}

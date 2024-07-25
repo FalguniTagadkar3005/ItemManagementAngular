@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { apiResponse } from '../DTO/customObjects';
 import { CookieService } from 'ngx-cookie-service';
-import { addRequest, allRequestWithCount, allrequestRequest, itemsForDropdown } from '../DTO/developer';
+import { addRequest, allRequestWithCount, allrequestRequest, getAvailableItemsRequest, getRequestByIdResponse, getRequestSingleItemResponse, itemsForDropdown } from '../DTO/developer';
 import { itemTypesForDropdown } from '../DTO/admin';
 
 @Injectable({
@@ -54,5 +54,52 @@ export class DeveloperService {
    {
       const header = this.getHeader();
       return this.http.post<apiResponse<allRequestWithCount>>(this.baseURL+'Developer/GetAllReturnRequests',request,{'headers':header});
+   }
+
+   getRequest(id:number)
+   {
+     const header = this.getHeader(); 
+     const params={'id':id}; 
+     return this.http.get<apiResponse<getRequestByIdResponse>>(this.baseURL+'Developer/GetRequest',{'headers':header,'params':params});
+   }
+
+   editRequest(id:number,req:addRequest)
+   {
+      const header = this.getHeader();
+      const params={'id':id}; 
+      return this.http.put<apiResponse<any>>(this.baseURL+'Developer/ManageRequest',req,{'headers':header,'params':params});
+   }
+
+   cancelRequest(id:number)
+   {
+      const header = this.getHeader();
+      const params={'id':id}; 
+      return this.http.delete<apiResponse<any>>(this.baseURL+'Developer/CancelRequest',{'headers':header,'params':params});
+   }
+
+   getAvailableItems(req:getAvailableItemsRequest)
+   {
+     const headers = this.getHeader();
+     return this.http.post<apiResponse<getRequestSingleItemResponse[]>>(this.baseURL+'Developer/GetAvailableItems',req,{headers:headers});
+   }
+
+   cancelReturnRequest(id:number)
+   {
+      const header = this.getHeader();
+      const params={'id':id}; 
+      return this.http.delete<apiResponse<any>>(this.baseURL+'Developer/CancelReturnRequest',{'headers':header,'params':params});
+   }
+
+   addReturnRequest(req:addRequest)
+   {
+      const header = this.getHeader();
+      return this.http.post<apiResponse<any>>(this.baseURL+'Developer/AddReturnRequest',req,{'headers':header});
+   }
+
+   editReturnRequest(id:number,req:addRequest)
+   {
+      const header = this.getHeader();
+      const params={'id':id}; 
+      return this.http.put<apiResponse<any>>(this.baseURL+'Developer/ManageReturnRequest',req,{'headers':header,'params':params});
    }
 }

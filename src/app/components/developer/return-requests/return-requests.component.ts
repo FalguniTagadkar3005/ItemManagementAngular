@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, ViewChild } from '@angular/core';
+import {  Component, Inject, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -12,12 +12,14 @@ import { MatSnackBar, MatSnackBarLabel, MatSnackBarModule } from '@angular/mater
 import { allRequestWithCount, allrequestRequest, request } from '../../../DTO/developer';
 import { DeveloperService } from '../../../services/developer.service';
 import { DatePipe } from '@angular/common';
+import { DeleteDialogComponent } from '../../../DTO/admin/delete-user-dialog/delete-dialog.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-return-requests',
   standalone: true,
   imports:[MatFormFieldModule, MatInputModule, MatTableModule, RouterModule,
-    MatSortModule, ReactiveFormsModule, MatPaginatorModule, MatDialogModule, MatSnackBarModule,DatePipe],
+    MatSortModule, ReactiveFormsModule, MatPaginatorModule, MatDialogModule, MatSnackBarModule,DatePipe,CommonModule],
   templateUrl: './return-requests.component.html',
   styleUrl: './return-requests.component.css'
 })
@@ -112,5 +114,30 @@ export class ReturnRequestsComponent {
 
   editRequest(requestId: number) {
     this.router.navigate(['/homepage/edit-return-request/' + requestId]);
+  }
+
+  public CancelRequest(reqId:number)
+  {
+    this._service.cancelReturnRequest(reqId).subscribe((res:apiResponse<string>)=>
+    {
+      this.openSnackBar(res.message,'OK');
+    })
+    this.router.navigate(['/homepage/return-requests']);
+  }
+
+  cancelDialog(reqId: number): void {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
+      width: '350px',
+      data: {
+        title: 'Confirm Cancellation',
+        message: 'Are you sure you want to cancel this request?'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.CancelRequest(reqId);
+      }
+    });
   }
 }

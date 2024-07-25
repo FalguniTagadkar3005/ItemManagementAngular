@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { AdminService } from '../../../services/admin.service';
 import { addOrEditItemTypeRequest } from '../../../DTO/admin';
 import { apiResponse } from '../../../DTO/customObjects';
-import { CommonModule } from '@angular/common';
+import { CommonModule,Location } from '@angular/common';
 import { MatSnackBar,MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 
@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
 export class AddItemTypesComponent {
   addItemTypeForm:FormGroup; 
 
-  constructor(private _service:AdminService,private _formBuilder:FormBuilder,private snackBar:MatSnackBar,private router:Router) {
+  constructor(private _service:AdminService,private _formBuilder:FormBuilder,private snackBar:MatSnackBar,private router:Router,private location:Location) {
     this.addItemTypeForm = this._formBuilder.group({
       name:['',[Validators.required]],
       description:['',[]],
@@ -60,4 +60,9 @@ export class AddItemTypesComponent {
   {
     this.router.navigate(['/homepage/add-item-type'])
   }
+  onBackClick()
+  {
+    this.location.back();
+  }
+
 }
